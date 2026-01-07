@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>BLACKROAD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #FFFFFF;
+            --amber: #F5A623;
+            --hot-pink: #FF1D6C;
+            --electric-blue: #2979FF;
+            --violet: #9C27B0;
+            --gradient-brand: linear-gradient(135deg, var(--amber) 0%, var(--hot-pink) 38.2%, var(--violet) 61.8%, var(--electric-blue) 100%);
+            --glass-bg: rgba(20, 20, 30, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: var(--amber);
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            background: var(--hot-pink);
+            top: 40%;
+            right: -5%;
+            animation-delay: 2s;
+        }
+
+        .orb:nth-child(3) {
+            width: 280px;
+            height: 280px;
+            background: var(--electric-blue);
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .orb:nth-child(4) {
+            width: 200px;
+            height: 200px;
+            background: var(--violet);
+            top: 60%;
+            right: 15%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(20px, 30px) scale(1.05); }
+        }
+
+        /* Content Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: 60px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.02); }
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        /* App Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 40px;
+        }
+
+        .app {
+            aspect-ratio: 1;
+            border-radius: 22px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-brand);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .app:active {
+            transform: scale(0.95);
+        }
+
+        .app:hover::before {
+            opacity: 0.1;
+        }
+
+        .app-icon {
+            font-size: 32px;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            width: 100%;
+            max-width: 400px;
+            display: grid;
+            gap: 15px;
+        }
+
+        .action-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-brand);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .action-card:active {
+            transform: scale(0.98);
+        }
+
+        .action-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .action-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-subtitle {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 12px 24px;
+            display: flex;
+            gap: 20px;
+            font-size: 11px;
+            z-index: 10;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        .status-dot.active {
+            background: #00FF88;
+        }
+
+        .status-dot.standby {
+            background: var(--amber);
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 375px) {
+            .logo { font-size: 36px; }
+            .app-grid { gap: 18px; }
+            .app { border-radius: 18px; }
+            .app-icon { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="logo">BLACKROAD</h1>
+        <div class="subtitle">AI ECOSYSTEM</div>
+
+        <!-- App Grid -->
+        <div class="app-grid">
+            <div class="app" onclick="window.location.href='https://blackroad.io'">
+                <div class="app-icon">🌌</div>
+                <div class="app-label">Portal</div>
+            </div>
+            <div class="app" onclick="window.location.href='https://lucidia.earth'">
+                <div class="app-icon">🌍</div>
+                <div class="app-label">Lucidia</div>
+            </div>
+            <div class="app" onclick="alert('Quantum AI Coming Soon')">
+                <div class="app-icon">⚡</div>
+                <div class="app-label">Quantum</div>
+            </div>
+            <div class="app" onclick="alert('Agent Hub Coming Soon')">
+                <div class="app-icon">🤖</div>
+                <div class="app-label">Agents</div>
+            </div>
+            <div class="app" onclick="alert('Analytics Coming Soon')">
+                <div class="app-icon">📊</div>
+                <div class="app-label">Analytics</div>
+            </div>
+            <div class="app" onclick="alert('Codex Coming Soon')">
+                <div class="app-icon">📚</div>
+                <div class="app-label">Codex</div>
+            </div>
+            <div class="app" onclick="alert('Dashboard Coming Soon')">
+                <div class="app-icon">📈</div>
+                <div class="app-label">Dashboard</div>
+            </div>
+            <div class="app" onclick="alert('Settings Coming Soon')">
+                <div class="app-icon">⚙️</div>
+                <div class="app-label">Settings</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="alert('Deploy Pipeline Activated')">
+                <div class="action-title">⚡ Quick Deploy</div>
+                <div class="action-subtitle">Deploy to all 56 repos</div>
+            </div>
+            <div class="action-card" onclick="alert('Agent Swarm Launching')">
+                <div class="action-title">🚀 Launch Agents</div>
+                <div class="action-subtitle">Activate 30,000 AI agents</div>
+            </div>
+            <div class="action-card" onclick="window.open('/Users/alexa/Desktop/blackroad-mega-motion-gallery.html')">
+                <div class="action-title">🎨 Motion Gallery</div>
+                <div class="action-subtitle">View visual showcase</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <div class="status-dot active"></div>
+            <span>ONLINE</span>
+        </div>
+        <div class="status-item">
+            <div class="status-dot active"></div>
+            <span>56 REPOS</span>
+        </div>
+        <div class="status-item">
+            <div class="status-dot standby"></div>
+            <span>30K AGENTS</span>
+        </div>
+    </div>
+
+    <script>
+        // Add touch feedback
+        document.querySelectorAll('.app, .action-card').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Prevent bounce scrolling on iOS
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.container')) {
+                return;
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        // Status bar real-time updates
+        setInterval(() => {
+            const time = new Date().toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            // Update status if needed
+        }, 1000);
+    </script>
+</body>
+</html>
